@@ -1,7 +1,8 @@
 ## READ ME
 
 This project is a work in progress as the development set up is finalised. 
-At the moment docker is used to set up an ubuntu server, running php8, Laravel 8 and MySQL 5.7 . Mysq is to be updated to Mysql 8 in due course. 
+At the moment docker is used to set up an ubuntu server, running php8, Laravel 8 and MySQL 8 .
+
 All updates to this set up are to be tested and committed into this repo. The readme file must also be kept up to date. 
 
 Currently the project uses Apache.
