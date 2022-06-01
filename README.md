@@ -1,38 +1,50 @@
 ## READ ME
+A simple form to verify an FCA number.
 
-This project is a work in progress as the development set up is finalised. 
-At the moment docker is used to set up an ubuntu server, running php8, Laravel 8 and MySQL 8 .
+The FCA number must be alphanumeric nd between 4 and 20 characters. 
 
-All updates to this set up are to be tested and committed into this repo. The readme file must also be kept up to date. 
-
-Currently the project uses Apache.
-
+If the FCA number is valid a success message is returned. Otherwise, an appropriate error message is given.
 
 ## Basic Setup
-Clone the project and run the following and cd into the project folder. 
-Copy and update the .env file as needed:
-``` cp .env.example .env```
-Now you can run the following docker commands:
-``` docker-compose build && docker-compose up -d && docker-compose logs -f```
-In a new terminal navigate back to the project and run:
-``` docker exec -it laravel-app bash -c "sudo -u devuser /bin/bash"```
-This will allow you to access the new server created 
-The following will need to be ran on the server:
-``` 
-composer install
-php artisan key:generate
-php artisan migrate
-php artisan ui vue --auth
+cd into laravel-set up and run 
+``` docker-compose up -d ```
+
+Update the ``FCA_KEY`` and ``FCA_EMAIL`` values in the .env file
+
+
+
+
+
+## Tests
+Run 
+```php artisan test``` to run the test suit. 
+
+## Further work
+###Caching
+Caching can be added to prevent the FCA API form getting called to many times, this can also help with preventing
+throttling of the API. 
+
+As only a simple cache is needed then it is recommended that Memcached is used. 
+
+This can be easily put into the ```FormController::verifyFca``` method with something along the lines of 
+
 ```
 
-You now need to update your host file to include the following
-``` 127.0.0.1       <app_name.local>```
+if (Cache::has($request->fcaNumber)) {
+    $fcaResult = Cache::get($cacheKey);
+}
+```
 
-## Useful commands
-If things do not look right i.e. no css run the following:
+to set the cache
 ```
-php artisan route:clear
-php artisan cache:clear
-php artisan view:clear
-npm run dev
+Cache::put($request->fcaNumber, $fcaResult, $ttl);
 ```
+
+###Credentials
+Move the  ``FCA_KEY`` and ``FCA_EMAIL`` values into Amazon KMS or something similar.
+This is to improve security and make sure nothing is added into git accidentally. 
+
+###Git
+As this is just a demo the ``.env`` is not in the git ignore file. 
+However, this should be the case. The ``.env`` file should be in the ``.gitignore`` and a .env.example
+file should be used with empty values and then manually copied over to ``.env``

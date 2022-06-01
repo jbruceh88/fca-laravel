@@ -6,7 +6,7 @@ services:
       context: '.'
       args:
         uid: ${UID}
-    container_name: laravel-app
+    container_name: simple-laravel-app
     environment:
       - APACHE_RUN_USER=#${UID}
       - APACHE_RUN_GROUP=#${UID}
@@ -17,11 +17,11 @@ services:
     networks:
       backend:
         aliases:
-          - laravel-app
+          - simple-laravel-app
 
   mysql-db:
     image: mysql:latest
-    container_name: mysql-db
+    container_name: simple-mysql-db
     volumes:
       - "./.mysql-data/db:/var/lib/mysql"
     environment:
